@@ -8,7 +8,7 @@ function App() {
   
   return (
     <>
-      <Tacos username="Lechuga"/>
+      <Tacos username="Hacker Rojo" active={activenpm}/>
     </>
   )
 };
