@@ -6,7 +6,7 @@ function Tacos(props) {
     //Define min and max numbers
     const min = 1;
     const max = 20;
-    const randomNumber = Math.floor(Math.random() * (max - min) + min);
+    
     return (
         <motion.div className='twitch-bot'
         //TODO insert enter animations
@@ -17,14 +17,14 @@ function Tacos(props) {
             animate={{scale: 0.9}}
             transition={{type: 'spring', repeat:Infinity, repeatType:'reverse'}}
             >   
-                {randomNumber > 1 &&
+                {props.number > 1 &&
                     <>
-                        {props.username} ahí tan tus <b className="message-focus">{randomNumber}</b> tacos.
+                        {props.username} ahí tan tus <b className="message-focus">{props.number}</b> tacos.
                     </>
                 }     
-                {randomNumber == 1 &&
+                {props.number == 1 &&
                     <>
-                        {props.username} nomás <b className="message-focus">{randomNumber}</b> taquito.
+                        {props.username} nomás <b className="message-focus">{props.number}</b> taquito.
                     </>
                 }     
             
