@@ -14,10 +14,6 @@ function App() {
 
   const tmiClient = useRef(
     new Tmi.Client({
-      options: { 
-        debug: true,
-        mode:'cors'
-      },
       identity: {
         username: 'jugarpaconvivir',
         password: 'oauth:68nqajwlygsiiut4x9ljn0tz1xgxu9'
