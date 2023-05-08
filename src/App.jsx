@@ -4,13 +4,20 @@ import Tacos from './Tacos'
 import Tmi from "tmi.js";
 
 function App() {
-  const [active, setActive] = useState(true);
+  // const [active, setActive] = useState(true);
   const [request, setRequest] = useState({});
   const [requestQueue, setRequestQueue] = useState([]);
 
+  //Define min and max numbers
+  const min = 1;
+  const max = 20;
+
   const tmiClient = useRef(
     new Tmi.Client({
-      options: { debug: true },
+      options: { 
+        debug: true,
+        mode:'cors'
+      },
       identity: {
         username: 'jugarpaconvivir',
         password: 'oauth:68nqajwlygsiiut4x9ljn0tz1xgxu9'
@@ -21,13 +28,14 @@ function App() {
 
   function handleRequest(username){
     let number = Math.floor(Math.random() * (max - min) + min);
+    
     if(request.username){
       setRequestQueue(queue => [...queue, {username, number}]);
       return;
     }
 
-    const request = {username, number};
-    setRequest(request);
+    const newRequest = {username, number};
+    setRequest(newRequest);
   }
 
   //Listen Chat
@@ -40,7 +48,7 @@ function App() {
       if(message.toLowerCase() === '!quierotacos') {
         // "@alca, heya!"
         // client.say(channel, `@${tags.username}, heya!`);
-        client.say(channel, `@${tags.username}, en un momentito le entregamos sus taquitos :)`);
+        tmiClient.current.say(channel, `@${tags.username}, En un momentito le entrego sus tacos!`);
         handleRequest(tags.username);
       }
     });
