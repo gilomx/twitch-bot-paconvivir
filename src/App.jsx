@@ -2,15 +2,17 @@ import {useState, useRef, useEffect} from 'react';
 import './App.css'
 import Tacos from './Tacos'
 import Tmi from "tmi.js";
+import { AnimatePresence } from 'framer-motion';
 
 function App() {
-  // const [active, setActive] = useState(true);
+  const [active, setActive] = useState(false);
   const [request, setRequest] = useState({});
   const [requestQueue, setRequestQueue] = useState([]);
 
   //Define min and max numbers
   const min = 1;
   const max = 20;
+  let timer;
 
   const tmiClient = useRef(
     new Tmi.Client({
@@ -24,14 +26,22 @@ function App() {
 
   function handleRequest(username){
     let number = Math.floor(Math.random() * (max - min) + min);
-    
-    if(request.username){
-      setRequestQueue(queue => [...queue, {username, number}]);
+
+    if(active){
+      console.log('entrando a requestqueue')
+      setRequestQueue(queue => [...queue, {username}]);
+      console.log("requestqueue:")
+      console.log(requestQueue);
       return;
     }
-
+    
     const newRequest = {username, number};
     setRequest(newRequest);
+    setActive(true);
+    timer = setTimeout(() => {
+      setActive(false);
+    }, 3000);
+    // clearTimeout(timer);
   }
 
   //Listen Chat
@@ -59,16 +69,16 @@ function App() {
   useEffect(() => {
     if (requestQueue.length && !request.username) {
       const nextRequest = requestQueue[0];
-      setRequest(nextRequest);
+      handleRequest(nextRequest);
     }
   }, [request, requestQueue]);
 
   return (
-    <>
-      {request.username && (
+    <AnimatePresence>
+      {request.username && active &&(
           <Tacos username={request.username} number={request.number} />
       )}
-    </>
+    </AnimatePresence>
   )
 };
 export default App

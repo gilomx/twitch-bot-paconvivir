@@ -9,13 +9,21 @@ function Tacos(props) {
     
     return (
         <motion.div className='twitch-bot'
-        //TODO insert enter animations
+            initial={{opacity:0, scale:0}}
+            animate={{opacity:1, scale:1}}
+            transition={{duration:0.4}}
+            exit={{opacity:0, scale:0}}
         >
             <img src={tacos} width="200px"/>
             <br/>
             <motion.p className="message"
             animate={{scale: 0.9}}
-            transition={{type: 'spring', repeat:Infinity, repeatType:'reverse'}}
+            transition={{
+                type: 'spring',
+                repeat:Infinity,
+                repeatType:'reverse',
+                delay: 0.4
+            }}
             >   
                 {props.number > 1 &&
                     <>
