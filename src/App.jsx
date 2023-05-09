@@ -28,8 +28,6 @@ function App() {
     let number = Math.floor(Math.random() * (max - min) + min);
     // console.log('entrando a requestqueue')
     setRequestQueue(queue => [...queue, {username, number}]);
-    // console.log("requestqueue:")
-    // console.log(requestQueue);
   }
 
   // function showNotification(data){
@@ -47,14 +45,18 @@ function App() {
     if(requestQueue.length){
       const nextNotification = requestQueue[0];
       setNotification(nextNotification);
-      setActive(true);
+      setTimeout(() => {
+        setActive(true);
+        //Add time to hide notification
+      }, 500)
 
       setTimeout(() => {
         setActive(false);
         setNotification({})
         setRequestQueue(queue => queue.slice(1));
-      }, 3000);
+      }, 4000);
 
+      
     }
 
   }
