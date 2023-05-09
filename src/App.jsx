@@ -6,7 +6,7 @@ import { AnimatePresence } from 'framer-motion';
 
 function App() {
   const [active, setActive] = useState(false);
-  const [request, setRequest] = useState({});
+  const [notification, setNotification] = useState({});
   const [requestQueue, setRequestQueue] = useState([]);
 
   //Define min and max numbers
@@ -26,19 +26,39 @@ function App() {
 
   function saveRequest(username){
     let number = Math.floor(Math.random() * (max - min) + min);
-    console.log('entrando a requestqueue')
-    setRequestQueue(queue => [...queue, {username}]);
-    console.log("requestqueue:")
-    console.log(requestQueue);
+    // console.log('entrando a requestqueue')
+    setRequestQueue(queue => [...queue, {username, number}]);
+    // console.log("requestqueue:")
+    // console.log(requestQueue);
   }
 
-function showNotification(request){
-  setRequest(request);
-  setActive(true);
-  timer = setTimeout(() => {
-    setActive(false);
-  }, 3000);
-}
+  // function showNotification(data){
+  //   setNotification(data);
+  //   setActive(true);
+  //   timer = setTimeout(() => {
+  //     setActive(false);
+  //   }, 3000);
+  // }
+
+  function notifier(){
+
+    if (active) return;
+
+    if(requestQueue.length){
+      const nextNotification = requestQueue[0];
+      setNotification(nextNotification);
+      setActive(true);
+
+      setTimeout(() => {
+        setActive(false);
+        setNotification({})
+        setRequestQueue(queue => queue.slice(1));
+      }, 3000);
+
+    }
+
+  }
+
   //Listen Chat
   useEffect(() => {
     tmiClient.current.connect();
@@ -62,21 +82,13 @@ function showNotification(request){
 
   //Handle request queue
   useEffect(() => {
-    
-   async function queue() { if (requestQueue.length && !active) {
-      const nextRequest = requestQueue[0];
-      await showNotification(nextRequest).then(() => {
-        setRequestQueue(queue => queue.slice(1));
-        setRequest({});
-      });
-    }};
-    queue();
-  }, [request, requestQueue]);
+    notifier();
+  }, [active,requestQueue]);
 
   return (
     <AnimatePresence>
       {active &&(
-          <Tacos username={request.username} number={request.number} />
+          <Tacos username={notification.username} number={notification.number} />
       )}
     </AnimatePresence>
   )
