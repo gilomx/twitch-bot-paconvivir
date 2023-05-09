@@ -24,26 +24,21 @@ function App() {
     })
   );
 
-  function handleRequest(username){
+  function saveRequest(username){
     let number = Math.floor(Math.random() * (max - min) + min);
-
-    if(active){
-      console.log('entrando a requestqueue')
-      setRequestQueue(queue => [...queue, {username}]);
-      console.log("requestqueue:")
-      console.log(requestQueue);
-      return;
-    }
-    
-    const newRequest = {username, number};
-    setRequest(newRequest);
-    setActive(true);
-    timer = setTimeout(() => {
-      setActive(false);
-    }, 3000);
-    // clearTimeout(timer);
+    console.log('entrando a requestqueue')
+    setRequestQueue(queue => [...queue, {username}]);
+    console.log("requestqueue:")
+    console.log(requestQueue);
   }
 
+function showNotification(request){
+  setRequest(request);
+  setActive(true);
+  timer = setTimeout(() => {
+    setActive(false);
+  }, 3000);
+}
   //Listen Chat
   useEffect(() => {
     tmiClient.current.connect();
@@ -55,7 +50,7 @@ function App() {
         // "@alca, heya!"
         // client.say(channel, `@${tags.username}, heya!`);
         tmiClient.current.say(channel, `@${tags.username}, En un momentito le entrego sus tacos!`);
-        handleRequest(tags.username);
+        saveRequest(tags.username);
       }
     });
 
@@ -67,15 +62,20 @@ function App() {
 
   //Handle request queue
   useEffect(() => {
-    if (requestQueue.length && !request.username) {
+    
+   async function queue() { if (requestQueue.length && !active) {
       const nextRequest = requestQueue[0];
-      handleRequest(nextRequest);
-    }
+      await showNotification(nextRequest).then(() => {
+        setRequestQueue(queue => queue.slice(1));
+        setRequest({});
+      });
+    }};
+    queue();
   }, [request, requestQueue]);
 
   return (
     <AnimatePresence>
-      {request.username && active &&(
+      {active &&(
           <Tacos username={request.username} number={request.number} />
       )}
     </AnimatePresence>
