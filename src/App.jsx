@@ -8,6 +8,7 @@ function App() {
   const [active, setActive] = useState(false);
   const [notification, setNotification] = useState({});
   const [requestQueue, setRequestQueue] = useState([]);
+  const [savedUsers, setSavedUsers] = useState([]);
 
   //Define min and max numbers
   const min = 1;
@@ -23,21 +24,23 @@ function App() {
       channels: [ 'jugarpaconvivir' ]
     })
   );
-
+    
   function saveRequest(username){
     let number = Math.floor(Math.random() * (max - min) + min);
     // console.log('entrando a requestqueue')
+
     setRequestQueue(queue => [...queue, {username, number}]);
+    setSavedUsers(users => [...users, {username, number}]);
   }
 
-  // function showNotification(data){
-  //   setNotification(data);
-  //   setActive(true);
-  //   timer = setTimeout(() => {
-  //     setActive(false);
-  //   }, 3000);
-  // }
+  const userExists = (username) =>{
+    console.log("Comprobando si el usuario existe:");
+    let exists = savedUsers.find(user => user.username === username);
+    console.log(exists);
+    return exists;
+  }
 
+  //Show notifications
   function notifier(){
 
     if (active) return;
@@ -69,10 +72,15 @@ function App() {
       if (self) return;
 
       if(message.toLowerCase() === '!quierotacos') {
-        // "@alca, heya!"
-        // client.say(channel, `@${tags.username}, heya!`);
-        tmiClient.current.say(channel, `@${tags.username}, En un momentito le entrego sus tacos!`);
-        saveRequest(tags.username);
+        const exists = (savedUsers.length) ? userExists(tags.username) : false;
+        console.log("Exists:");
+        console.log(exists);
+        if(exists){
+          tmiClient.current.say(channel, `@${tags.username}, Tu ya comiste tragon@`);
+        }else {
+          tmiClient.current.say(channel, `@${tags.username}, En un momentito le entrego sus tacos!`);
+          saveRequest(tags.username);
+        }
       }
     });
 
