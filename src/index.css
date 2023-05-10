@@ -60,9 +60,8 @@ button:focus-visible {
   margin-bottom: 0;
   font-size: 36px;
 }
-
 .message > b{
-  color:red;
+  color:rgb(0, 201, 252);
 }
 
 @media (prefers-color-scheme: light) {

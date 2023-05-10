@@ -27,12 +27,12 @@ function Tacos(props) {
             >   
                 {props.number > 1 &&
                     <>
-                        {props.username} ahí tan tus <b className="message-focus">{props.number}</b> tacos.
+                        <b>{props.username}</b> ahí tan tus <b>{props.number}</b> tacos.
                     </>
                 }     
                 {props.number == 1 &&
                     <>
-                        {props.username} nomás <b className="message-focus">{props.number}</b> taquito.
+                        <b>{props.username}</b> nomás <b>{props.number}</b> taquito.
                     </>
                 }     
             
