@@ -9,7 +9,7 @@ function App() {
   const [notification, setNotification] = useState({});
   const [requestQueue, setRequestQueue] = useState([]);
   const [savedUsers, setSavedUsers] = useState([]);
-
+  const channelRef = useRef();
   //Define min and max numbers
   const min = 1;
   const max = 20;
@@ -28,14 +28,26 @@ function App() {
   function saveRequest(username){
     let number = Math.floor(Math.random() * (max - min) + min);
     // console.log('entrando a requestqueue')
+    // const exists = (savedUsers.length) ? userExists(username) : false;
 
-    setRequestQueue(queue => [...queue, {username, number}]);
-    setSavedUsers(users => [...users, {username, number}]);
+    
+
+    console.log("Exists:");
+    // console.log(exists);
+    // tmiClient.current.connect();
+    if(userExists(username)){
+      tmiClient.current.say(channelRef.current, `@${username}, Tu ya comiste tragon@`);
+    }else {
+      setRequestQueue(queue => [...queue, {username, number}]);
+      setSavedUsers(users => [...users, {username, number}]);
+      tmiClient.current.say(channelRef.current, `@${username}, En un momentito le entrego sus tacos!`);
+    }
+    // tmiClient.current.disconnect();
   }
 
-  const userExists = (username) =>{
+  const userExists = (username, users) =>{
     console.log("Comprobando si el usuario existe:");
-    let exists = savedUsers.find(user => user.username === username);
+    let exists = savedUsers.some(user => user.username === username);
     console.log(exists);
     return exists;
   }
@@ -70,17 +82,10 @@ function App() {
 
     tmiClient.current.on("message", (channel, tags, message, self) => {
       if (self) return;
+      channelRef.current = channel;
 
       if(message.toLowerCase() === '!quierotacos') {
-        const exists = (savedUsers.length) ? userExists(tags.username) : false;
-        console.log("Exists:");
-        console.log(exists);
-        if(exists){
-          tmiClient.current.say(channel, `@${tags.username}, Tu ya comiste tragon@`);
-        }else {
-          tmiClient.current.say(channel, `@${tags.username}, En un momentito le entrego sus tacos!`);
-          saveRequest(tags.username);
-        }
+        saveRequest(tags.username);
       }
     });
 
@@ -88,6 +93,7 @@ function App() {
       tmiClient.current.disconnect();
     };
   }, []);
+  
   
 
   //Handle request queue
