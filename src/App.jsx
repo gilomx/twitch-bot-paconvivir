@@ -1,5 +1,6 @@
 import {useState, useRef, useEffect} from 'react';
 import './App.css'
+import sound from './assets/audio.mp3'
 import Tacos from './Tacos'
 import Tmi from "tmi.js";
 import { AnimatePresence } from 'framer-motion';
@@ -8,8 +9,12 @@ function App() {
   const [active, setActive] = useState(false);
   const [notification, setNotification] = useState({});
   const [requestQueue, setRequestQueue] = useState([]);
+  const [notificationQueue, setNotificationQueue] = useState([]);
   const [savedUsers, setSavedUsers] = useState([]);
   const channelRef = useRef();
+
+  const audio = new Audio(sound);
+
   //Define min and max numbers
   const min = 1;
   const max = 20;
@@ -24,42 +29,66 @@ function App() {
       channels: [ 'jugarpaconvivir' ]
     })
   );
-    
-  function saveRequest(username){
+  
+  function handleRequest(username){
+    console.log('handlerequest()')
     let number = Math.floor(Math.random() * (max - min) + min);
-    // console.log('entrando a requestqueue')
-    // const exists = (savedUsers.length) ? userExists(username) : false;
-
-    
-
-    console.log("Exists:");
-    // console.log(exists);
-    // tmiClient.current.connect();
-    if(userExists(username)){
-      tmiClient.current.say(channelRef.current, `@${username}, Tu ya comiste tragon@`);
-    }else {
-      setRequestQueue(queue => [...queue, {username, number}]);
-      setSavedUsers(users => [...users, {username, number}]);
-      tmiClient.current.say(channelRef.current, `@${username}, En un momentito le entrego sus tacos!`);
-    }
-    // tmiClient.current.disconnect();
+    setRequestQueue(queue => [...queue, {username, number}]);
   }
 
-  const userExists = (username, users) =>{
+  const userExists = (username) =>{
     console.log("Comprobando si el usuario existe:");
     let exists = savedUsers.some(user => user.username === username);
     console.log(exists);
     return exists;
   }
 
+  function saveRequest(){
+    console.log("requestQueue()")
+    console.log(requestQueue);
+
+    if(requestQueue.length){
+      
+      const nextRequest = requestQueue[0];
+      console.log("nextRequest:")
+      console.log(nextRequest);
+      
+      const username = nextRequest.username;
+      console.log("username:")
+      console.log(username);
+      
+      const number = nextRequest.number;
+      console.log("number:")
+      console.log(number);
+
+      const exists = userExists(username);
+      console.log("userExists")
+      console.log(exists);
+
+      if(exists){
+        console.log("entrando a si existe")
+        tmiClient.current.say(channelRef.current, `@${username}, Tu ya comiste tragon@`);
+      }else {
+        console.log("entrando a no existe")
+        setNotificationQueue(queue => [...queue, {username, number}]);
+        setSavedUsers(users => [...users, {username, number}]);
+        tmiClient.current.say(channelRef.current, `@${username}, En un momentito le entrego sus tacos!`);
+      }
+      
+      setRequestQueue(queue => queue.slice(1));
+    }
+  }
+
   //Show notifications
   function notifier(){
 
     if (active) return;
-
-    if(requestQueue.length){
-      const nextNotification = requestQueue[0];
+    
+    if(notificationQueue.length){
+      const nextNotification = notificationQueue[0];
       setNotification(nextNotification);
+      audio.play();
+      
       setTimeout(() => {
         setActive(true);
         //Add time to hide notification
@@ -68,13 +97,15 @@ function App() {
       setTimeout(() => {
         setActive(false);
         setNotification({})
-        setRequestQueue(queue => queue.slice(1));
+        setNotificationQueue(queue => queue.slice(1));
       }, 4000);
 
       
     }
 
   }
+
+  
 
   //Listen Chat
   useEffect(() => {
@@ -85,7 +116,7 @@ function App() {
       channelRef.current = channel;
 
       if(message.toLowerCase() === '!quierotacos') {
-        saveRequest(tags.username);
+        handleRequest(tags.username);
       }
     });
 
@@ -95,11 +126,15 @@ function App() {
   }, []);
   
   
+  //Handle requestQueue
+  useEffect(() => {
+    saveRequest();
+  }, [requestQueue]);
 
   //Handle request queue
   useEffect(() => {
     notifier();
-  }, [active,requestQueue]);
+  }, [active,notificationQueue, notification]);
 
   return (
     <AnimatePresence>
