@@ -81,6 +81,79 @@ button:focus-visible {
   line-height: 65px;
   color: #FFFFFF;
 }
+.table-headings {
+  display: flex;
+  justify-content: center;
+  font-family: 'Lato';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 19px;
+  color: #FFFFFF;
+}
+.player-head{
+  text-align: left;
+  width: 50%;
+  padding-left: 40px;
+}
+.points-head{
+  text-align: right;
+  width:50%;
+  padding-right: 40px;
+}
+.ul-container{
+  padding-inline-start: 0px;
+  width:100%;
+  /* display: flex; */
+  list-style: none;
+}
+.player-line, .win-player-line{
+  width:100%;
+  display: flex;
+  justify-content: center;
+  background: rgba(0, 36, 163, 0.52);
+  padding:10px 0;
+  margin-bottom:5px;
+}
+.win-player-line{
+  background: rgba(255, 0, 199, 0.47);
+}
+.player, .win-player{
+  padding-left: 40px;
+  text-align: left;
+  width: 50%;
+  font-family: 'Lato';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 24px;
+  line-height: 29px;
+  /* identical to box height */
+  color: rgba(255, 255, 255, 0.6);
+}
+.win-player{
+  font-weight: 900;
+  font-size: 36px;
+  line-height: 43px;
+  color: #FFFFFF;
+}
+.points, .win-points{
+  width: 50%;
+  text-align: right;
+  padding-right: 40px;
+  font-family: 'Lato';
+  font-style: normal;
+  font-weight: 900;
+  font-size: 24px;
+  line-height: 29px;
+  /* identical to box height */
+  color: rgba(255, 245, 0, 0.6);
+}
+.win-points{
+  font-weight: 900;
+  font-size: 36px;
+  line-height: 43px;
+  color: #FFF500;
+}
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;

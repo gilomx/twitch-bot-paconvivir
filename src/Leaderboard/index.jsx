@@ -16,18 +16,42 @@ function Leaderboard(props) {
         >
             <h1>¿Quién tragó más?</h1>
             {/* <img src={tacos} width="200px"/> */}
-            <br/>
-            <br/>
-            <br/>
-            <br/>
-            <br/>
-            <br/>
-            <br/>
-            <br/>
-            <br/>
-            <br/>
-            <br/>
-            <br/>
+            <div className="table-headings">
+                <div className="player-head">Jugador</div>
+                <div className="points-head">Puntos</div>
+            </div>
+            <ul className="ul-container">
+                <li>
+                    <div className="win-player-line">
+                        <div className="win-player">Cochiloco</div>
+                        <div className="win-points">19</div>
+                    </div>
+                </li>
+                <li>
+                    <div className="player-line">
+                        <div className="player">Cochiloco</div>
+                        <div className="points">19</div>
+                    </div>
+                </li>
+                <li>
+                    <div className="player-line">
+                        <div className="player">Cochiloco</div>
+                        <div className="points">19</div>
+                    </div>
+                </li>
+                <li>
+                    <div className="player-line">
+                        <div className="player">Cochiloco</div>
+                        <div className="points">19</div>
+                    </div>
+                </li>
+                <li>
+                    <div className="player-line">
+                        <div className="player">Cochiloco</div>
+                        <div className="points">19</div>
+                    </div>
+                </li>
+            </ul>
             <br/>
         </motion.div>
     );
