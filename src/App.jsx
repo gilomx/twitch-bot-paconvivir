@@ -2,6 +2,7 @@ import {useState, useRef, useEffect} from 'react';
 import './App.css'
 import sound from './assets/audio.mp3'
 import Tacos from './Tacos'
+import Leaderboard from './Leaderboard'
 import Tmi from "tmi.js";
 import { AnimatePresence } from 'framer-motion';
 
@@ -138,9 +139,12 @@ function App() {
 
   return (
     <AnimatePresence>
-      {active &&(
-          <Tacos username={notification.username} number={notification.number} />
-      )}
+      {
+        active &&(
+            <Tacos username={notification.username} number={notification.number} />
+        )
+      }
+      <Leaderboard/>
     </AnimatePresence>
   )
 };
