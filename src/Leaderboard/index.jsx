@@ -23,32 +23,32 @@ function Leaderboard(props) {
             <ul className="ul-container">
                 <li>
                     <div className="win-player-line">
-                        <div className="win-player">Cochiloco</div>
-                        <div className="win-points">19</div>
+                        <div className="win-player">coquito</div>
+                        <div className="win-points">36</div>
                     </div>
                 </li>
                 <li>
                     <div className="player-line">
-                        <div className="player">Cochiloco</div>
-                        <div className="points">19</div>
+                        <div className="player">FurrymichiYT</div>
+                        <div className="points">29</div>
                     </div>
                 </li>
                 <li>
                     <div className="player-line">
-                        <div className="player">Cochiloco</div>
-                        <div className="points">19</div>
+                        <div className="player">lechux_</div>
+                        <div className="points">21</div>
                     </div>
                 </li>
                 <li>
                     <div className="player-line">
-                        <div className="player">Cochiloco</div>
-                        <div className="points">19</div>
+                        <div className="player">Cyborg</div>
+                        <div className="points">18</div>
                     </div>
                 </li>
                 <li>
                     <div className="player-line">
-                        <div className="player">Cochiloco</div>
-                        <div className="points">19</div>
+                        <div className="player">moxxiepocossimps</div>
+                        <div className="points">15</div>
                     </div>
                 </li>
             </ul>
