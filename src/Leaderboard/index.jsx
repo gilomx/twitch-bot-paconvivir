@@ -19,7 +19,6 @@ function Leaderboard(props) {
         >
             <h1>¿Quién tragó más?</h1>
             {/* <img src={tacos} width="200px"/> */}
-
             {sorted.length > 0 &&
                 <>
                     <div className="table-headings">
@@ -28,8 +27,8 @@ function Leaderboard(props) {
                     </div>
                     <ul className="ul-container">
                         <AnimatePresence>
-                            {sorted.map((player, i) => (
-                                <ListItem firstNumber={sorted[0].number} playerNumber={player.number} playerName={player.username}/>
+                            {sorted.map((player) => (
+                                <ListItem firstNumber={sorted[0].number} playerId={player.id} playerNumber={player.number} playerName={player.username}/>
                             ))}
                         </AnimatePresence>
                         {/* <li>
