@@ -55,6 +55,12 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
+li{
+  list-style:none;
+}
+ul{
+  padding:0;
+}
 .message{
   margin-top: 0;
   margin-bottom: 0;
@@ -66,6 +72,7 @@ button:focus-visible {
 
 .leaderboard{
   width:680px;
+  max-width:680px;
   background: rgba(0, 47, 215, 0.88);
   box-shadow: 0px 11px 9px rgba(0, 0, 0, 0.25);
   border-radius: 33px;

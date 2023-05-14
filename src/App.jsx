@@ -14,7 +14,7 @@ function App() {
 
   //Define min and max numbers
   const min = 1;
-  const max = 50;
+  const max = 500;
   let timer;
 
   const tmiClient = useRef(

@@ -1,12 +1,12 @@
 //Tacos Component
-import { AnimatePresence, motion, usePresence } from "framer-motion";
+import { AnimatePresence, motion, Reorder  } from "framer-motion";
 import medal from '../assets/lovecoin.png'
 import ListItem from "./ListItem";
 
 function Leaderboard(props) {
     //Define min and max numbers
-    const min = 1;
-    const max = 20;
+    // const min = 1;
+    // const max = 500;
     const users = props.users.savedUsers;
     const sorted = users.sort((a, b) => b.number - a.number).slice(0, 5);
     console.log(sorted);
@@ -25,43 +25,50 @@ function Leaderboard(props) {
                         <div className="player-head">Jugador</div>
                         <div className="points-head">Tacos Absorbidos</div>
                     </div>
-                    <ul className="ul-container">
-                        <AnimatePresence>
+                    <Reorder.Group values={sorted}
+                        as="ul"
+                        axis="y"
+                        >
                             {sorted.map((player) => (
-                                <ListItem firstNumber={sorted[0].number} playerId={player.id} playerNumber={player.number} playerName={player.username}/>
-                            ))}
-                        </AnimatePresence>
+                                <ListItem
+                                key={player.id}
+                                firstNumber={sorted[0].number}
+                                playerId={player.id}
+                                playerNumber={player.number}
+                                playerName={player.username}/>
+                                ))}
                         {/* <li>
                             <div className="win-player-line">
-                                <div className="win-player">coquito</div>
-                                <div className="win-points">36</div>
+                            <div className="win-player">coquito</div>
+                            <div className="win-points">36</div>
                             </div>
-                        </li>
-                        <li>
+                            </li>
+                            <li>
                             <div className="player-line">
-                                <div className="player">FurrymichiYT</div>
-                                <div className="points">29</div>
+                            <div className="player">FurrymichiYT</div>
+                            <div className="points">29</div>
                             </div>
-                        </li>
-                        <li>
+                            </li>
+                            <li>
                             <div className="player-line">
-                                <div className="player">lechux_</div>
-                                <div className="points">21</div>
+                            <div className="player">lechux_</div>
+                            <div className="points">21</div>
                             </div>
-                        </li>
-                        <li>
+                            </li>
+                            <li>
                             <div className="player-line">
-                                <div className="player">Cyborg</div>
-                                <div className="points">18</div>
+                            <div className="player">Cyborg</div>
+                            <div className="points">18</div>
                             </div>
-                        </li>
-                        <li>
+                            </li>
+                            <li>
                             <div className="player-line">
-                                <div className="player">moxxiepocossimps</div>
-                                <div className="points">15</div>
+                            <div className="player">moxxiepocossimps</div>
+                            <div className="points">15</div>
                             </div>
                         </li> */}
-                    </ul>
+                    </Reorder.Group>
+                    
                 </>
             }
             {sorted.length === 0 &&
