@@ -1,6 +1,7 @@
 //Tacos Component
 import { AnimatePresence, motion, Reorder  } from "framer-motion";
 import medal from '../assets/lovecoin.png'
+import taco from '../assets/food_taco.png'
 import ListItem from "./ListItem";
 
 function Leaderboard(props) {
@@ -78,6 +79,29 @@ function Leaderboard(props) {
                     src={medal} width="200px"/>
             }
             <br/>
+            <motion.img 
+                className="taco-img"
+                initial={{
+                    rotate: -10,
+                    scale:0.9
+                }}
+                animate={{
+                    scale:1.1,
+                    rotate:-20,
+                    x:-30,
+                    y:-20
+                }}
+                transition={{
+                    duration: 1,
+                    type: "spring",
+                    repeat: Infinity,
+                    repeatType: 'mirror',
+                    repeatDelay:5,
+                    stiffness:50,
+                    damping:2
+                  }}
+                src={taco}
+                width="300px" />
         </motion.div>
     );
 }
