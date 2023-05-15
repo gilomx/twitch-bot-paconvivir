@@ -33,26 +33,28 @@ function App() {
     const number = Math.floor(Math.random() * (max - min) + min);
     // const id = lastId + 1;
     const exists = userExists(username);
-
-    // if(exists){
-    //   console.log("entrando a si existe")
-    //   tmiClient.current.say(channelRef.current, `@${username}, Tu ya comiste tragon@`);
-    // }else {
-    //   console.log("entrando a no existe")
-    //   setSavedUsers(users => [...users, {username, number}]);
-    //   const tacosMsg = number === 1 ? '1 taquito :(' : `${number} tacos`;
-    //   tmiClient.current.say(channelRef.current, `@${username}, Te comiste ${tacosMsg}`);
-    // }
-
+    
+    if(exists){
+      console.log("entrando a si existe")
+      tmiClient.current.say(channelRef.current, `@${username}, Tu ya comiste tragon@`);
+    }else {
+      console.log("entrando a no existe")
+      setSavedUsers(users => [...users, {username, number}]);
+      const tacosMsg = number === 1 ? '1 taquito :(' : `${number} tacos`;
+      tmiClient.current.say(channelRef.current, `@${username}, Te comiste ${tacosMsg}`);
+    }
+    console.log(savedUsers);
     //Only for test, for production use the code commented before
     // console.log("entrando a no existe")
-    setSavedUsers(users => [...users, {id, username, number}]);
-    const tacosMsg = number === 1 ? '1 taquito :(' : `${number} tacos`;
-    tmiClient.current.say(channelRef.current, `@${username}, Te comiste ${tacosMsg}`);
+    // setSavedUsers(users => [...users, {id, username, number}]);
+    // const tacosMsg = number === 1 ? '1 taquito :(' : `${number} tacos`;
+    // tmiClient.current.say(channelRef.current, `@${username}, Te comiste ${tacosMsg}`);
   }
 
   const userExists = (username) =>{
-    let exists = savedUsers.some(user => user.username === username);
+    console.log("existe " + username + "?")
+    const exists = savedUsers.some(user => user.username === username);
+    console.log(exists);
     return exists;
   }
 
