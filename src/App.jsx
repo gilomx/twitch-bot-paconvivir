@@ -1,13 +1,12 @@
 import {useState, useRef, useEffect} from 'react';
 import './App.css'
-import sound from './assets/audio.mp3'
-import Tacos from './Tacos'
 import Leaderboard from './Leaderboard'
 import Tmi from "tmi.js";
 import { AnimatePresence } from 'framer-motion';
 
 function App() {
   // const [active, setActive] = useState(false);
+  const [lastUser, setLastUser] = useState({});
   const [savedUsers, setSavedUsers] = useState([]);
   const channelRef = useRef();
 
@@ -27,19 +26,37 @@ function App() {
     })
   );
 
-  function handleRequest(username, id){
-    console.log("saveRequest()")
+  function handleRequest(){
+    
+    if(!lastUser) return;
 
+    console.log("saveRequest()")
+    console.log(savedUsers);
     const number = Math.floor(Math.random() * (max - min) + min);
+    const username = lastUser.username;
+    // const userName = username;
+    const times = getUserAttempts(username);
+    // const times = (savedAttempts) ? savedAttempts + 1 : 1;
+    console.log(times);
+    const id = lastUser.id;
     // const id = lastId + 1;
+
     const exists = userExists(username);
     
-    if(exists){
+    if(exists && times>=3){
       console.log("entrando a si existe")
       tmiClient.current.say(channelRef.current, `@${username}, Tu ya comiste tragon@`);
     }else {
       console.log("entrando a no existe")
-      setSavedUsers(users => [...users, {username, number}]);
+      if(exists){
+        setSavedUsers((users) =>
+          users.map((user) =>
+            username === username ? { ...user, times: user.times + 1, number: number} : user
+          )
+        );
+      }else{
+        setSavedUsers(users => [...users, {id, username, number, times}]);
+      }
       const tacosMsg = number === 1 ? '1 taquito :(' : `${number} tacos`;
       tmiClient.current.say(channelRef.current, `@${username}, Te comiste ${tacosMsg}`);
     }
@@ -49,6 +66,7 @@ function App() {
     // setSavedUsers(users => [...users, {id, username, number}]);
     // const tacosMsg = number === 1 ? '1 taquito :(' : `${number} tacos`;
     // tmiClient.current.say(channelRef.current, `@${username}, Te comiste ${tacosMsg}`);
+    setLastUser({});
   }
 
   const userExists = (username) =>{
@@ -56,6 +74,15 @@ function App() {
     const exists = savedUsers.some(user => user.username === username);
     console.log(exists);
     return exists;
+  }
+
+  const getUserAttempts = (username) => {
+    let userAttempts = 1;
+    const user = savedUsers.find((user) => user.username === username);
+    if(user){
+      userAttempts = user.times;
+    }
+    return userAttempts;
   }
 
   //Listen Chat
@@ -68,7 +95,10 @@ function App() {
 
       if(message.toLowerCase() === '!quierotacos') {
         // console.log(tags);
-        handleRequest(tags.username,tags.id);
+        setLastUser({
+          username: tags.username,
+          id: tags.id
+        });
       }
     });
     return () => {
@@ -76,6 +106,10 @@ function App() {
     };
   }, []);
   
+  useEffect(() => {
+    if(!lastUser || Object.keys(lastUser).length === 0) return;
+    handleRequest();
+  }, [lastUser]);
   
   return (
     <AnimatePresence>
