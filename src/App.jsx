@@ -10,67 +10,49 @@ function App() {
   const [savedUsers, setSavedUsers] = useState([]);
   const channelRef = useRef();
 
-
   //Define min and max numbers
   const min = 1;
   const max = 500;
-  let timer;
 
   const tmiClient = useRef(
     new Tmi.Client({
       identity: {
-        username: 'jugarpaconvivir',
-        password: 'oauth:68nqajwlygsiiut4x9ljn0tz1xgxu9'
+        username: import.meta.env.VITE_TWITCH_USERNAME,
+        password: import.meta.env.VITE_TWITCH_OAUTH
       },
-      channels: [ 'jugarpaconvivir' ]
+      channels: [ import.meta.env.VITE_TWITCH_CHANNEL ]
     })
   );
 
-  function handleRequest(){
-    
+  function handleRequest(){    
     if(!lastUser) return;
 
-    console.log("saveRequest()")
-    console.log(savedUsers);
     const number = Math.floor(Math.random() * (max - min) + min);
     const username = lastUser.username;
-    // const userName = username;
     const times = getUserAttempts(username);
-    // const times = (savedAttempts) ? savedAttempts + 1 : 1;
     console.log(times);
     const id = lastUser.id;
-    // const id = lastId + 1;
-
     const exists = userExists(username);
-    
-    if(exists && times>=3){
-      console.log("entrando a si existe")
+    // console.log('Vite Attempts: ',import.meta.env.VITE_ATTEMPTS)
+    if(exists && times>=import.meta.env.VITE_ATTEMPTS){
       tmiClient.current.say(channelRef.current, `@${username}, Tu ya comiste tragon@`);
+      return;
+    }else if(exists && times<import.meta.env.VITE_ATTEMPTS){
+      setSavedUsers((users) =>
+        users.map((user) =>
+          user.username === username ? { ...user, times: user.times + 1, number: number} : user
+        )
+      );
+
     }else {
-      console.log("entrando a no existe")
-      if(exists){
-        setSavedUsers((users) =>
-          users.map((user) =>
-            username === username ? { ...user, times: user.times + 1, number: number} : user
-          )
-        );
-      }else{
-        setSavedUsers(users => [...users, {id, username, number, times}]);
-      }
+      setSavedUsers(users => [...users, {id, username, number, times}]);
+    }
       const tacosMsg = number === 1 ? '1 taquito :(' : `${number} tacos`;
       tmiClient.current.say(channelRef.current, `@${username}, Te comiste ${tacosMsg}`);
-    }
-    console.log(savedUsers);
-    //Only for test, for production use the code commented before
-    // console.log("entrando a no existe")
-    // setSavedUsers(users => [...users, {id, username, number}]);
-    // const tacosMsg = number === 1 ? '1 taquito :(' : `${number} tacos`;
-    // tmiClient.current.say(channelRef.current, `@${username}, Te comiste ${tacosMsg}`);
-    setLastUser({});
+      setLastUser({});
   }
 
   const userExists = (username) =>{
-    console.log("existe " + username + "?")
     const exists = savedUsers.some(user => user.username === username);
     console.log(exists);
     return exists;
