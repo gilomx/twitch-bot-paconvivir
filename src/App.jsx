@@ -10,9 +10,21 @@ function App() {
   const [savedUsers, setSavedUsers] = useState([]);
   const channelRef = useRef();
 
+  //config
+  const config = {
+    min: 1,
+    max: 10000,
+    title: 'Mi abuelo Orlando',
+    playerHead: 'Señor',
+    pointsHead: 'Tacos tragados',
+    overlayBackground: 'rgba(97, 47, 215, 0.88)',
+    itemBackground:'red',
+    winItemBackground:'green'
+  };
+
   //Define min and max numbers
-  const min = 1;
-  const max = 500;
+  // const min = 1;
+  // const max = 500;
 
   const tmiClient = useRef(
     new Tmi.Client({
@@ -27,7 +39,7 @@ function App() {
   function handleRequest(){    
     if(!lastUser) return;
 
-    const number = Math.floor(Math.random() * (max - min) + min);
+    const number = Math.floor(Math.random() * (config.max - config.min) + config.min);
     const username = lastUser.username;
     const times = getUserAttempts(username);
     console.log(times);
@@ -95,7 +107,7 @@ function App() {
   
   return (
     <AnimatePresence>
-      <Leaderboard users={{savedUsers}} />
+      <Leaderboard config={config}  users={{savedUsers}} />
     </AnimatePresence>
   )
 };

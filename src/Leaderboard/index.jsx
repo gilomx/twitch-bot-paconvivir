@@ -5,6 +5,20 @@ import taco from '../assets/food_taco.png'
 import ListItem from "./ListItem";
 
 function Leaderboard(props) {
+
+    const styles = {
+        leaderBoard:{
+            background: props.config.overlayBackground
+        },
+        playerLine:{
+            background: props.config.itemBackground
+        },
+        winPlayerLine:{
+            background: props.config.winItemBackground
+        }
+
+    }
+
     //Define min and max numbers
     // const min = 1;
     // const max = 500;
@@ -12,19 +26,19 @@ function Leaderboard(props) {
     const sorted = users.sort((a, b) => b.number - a.number).slice(0, 5);
     console.log(sorted);
     return (
-        <motion.div className='leaderboard'
+        <motion.div className='leaderboard' style={styles.leaderBoard}
             initial={{opacity:0, scale:0}}
             animate={{opacity:1, scale:1}}
             transition={{duration:0.4}}
             exit={{opacity:0, scale:0}}
         >
-            <h1>¿Quién tragó más?</h1>
+            <h1>{props.config.title}</h1>
             {/* <img src={tacos} width="200px"/> */}
             {sorted.length > 0 &&
                 <>
                     <div className="table-headings">
-                        <div className="player-head">Jugador</div>
-                        <div className="points-head">Tacos Absorbidos</div>
+                        <div className="player-head">{props.config.playerHead}</div>
+                        <div className="points-head">{props.config.pointsHead}</div>
                     </div>
                     <Reorder.Group values={sorted}
                         as="ul"
@@ -32,6 +46,7 @@ function Leaderboard(props) {
                         >
                             {sorted.map((player) => (
                                 <ListItem
+                                styles={styles}
                                 key={player.id}
                                 firstNumber={sorted[0].number}
                                 playerId={player.id}
